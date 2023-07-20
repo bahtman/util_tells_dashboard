@@ -25,6 +25,7 @@ def set_map(map, row = None):
 @st.cache_data
 def load_data():
     df = pd.read_json('./data/parsed_util.json')
+    df['throwSeconds'] = df['throwSeconds'].apply(int)
     df_t = df.query('throwerSide=="t"')
     df_ct = df.query('throwerSide=="ct"')
     return df_t, df_ct
@@ -75,7 +76,7 @@ def get_cluster_overview(df, type):
 
                 # cc[5].text('Lobby/A')
                 # cc[5].text(2)
-                cc[0].dataframe(row[["opponentName", "grenadeType"]].to_frame().T, hide_index=True, use_container_width=True)
+                cc[0].dataframe(row[["throwerName", "throwSeconds", "opponentName"]].to_frame().T, hide_index=True, use_container_width=True)
                 #
 
 
