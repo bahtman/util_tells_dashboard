@@ -1,0 +1,4 @@
+streamlit
+pandas
+cs-bahtml @ git+https://github.com/bahtman/cs_bahtML@da4ed44fcb3b9a19e5a9b158f4f359f5a2953fbf
+jupyter
