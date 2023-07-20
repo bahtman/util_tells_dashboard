@@ -97,7 +97,7 @@ df_t, df_ct = load_data()
 if 'fig' not in st.session_state:
     set_map(MAP_NAME)
 
-st.title('Yard smoke tool')
+st.title('Vitality on mirage utility tell tool')
 cluster_col, fig_col =st.columns(2)
 
 with cluster_col:
