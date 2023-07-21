@@ -62,7 +62,7 @@ def get_cluster_overview(df, type):
 
         
 
-        with st.expander(f"Similarity score: {score} - {n_row} occurences - {util_type}"):
+        with st.expander(f"Dissimilarity score: {score} - {n_row} occurences - {util_type}"):
             for idx, row in df_group.iterrows():
                 st.divider()
                 cc = st.columns([5,1])
