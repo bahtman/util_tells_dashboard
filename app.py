@@ -49,7 +49,13 @@ def get_cluster_overview(df, type):
     for df_group in groups:
         n_row = len(df_group)
         score = int(df_group['util_score'].min())
-        if score >1000:
+        if n_row <3:
+            continue
+        if score >1200:
+            continue
+        if (score >1000) & (type=="ct"):
+            continue
+        if not "Heroic" in list(df_group.opponentName):
             continue
 
         
