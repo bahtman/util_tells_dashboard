@@ -9,7 +9,6 @@ st.set_page_config(layout="wide")
 DATA_PATH = './data/'
 MAP_PATH = './media/maps'
 PAGINATION_SIZE = 5
-MAP_NAME = "de_mirage"
 
 def set_map(map, row = None):
     fig = load_map(MAP_PATH, map)
@@ -23,9 +22,15 @@ def set_map(map, row = None):
     st.session_state.fig = fig
     
 @st.cache_data
-def load_data():
+def load_data(selected):
     df = pd.read_json('./data/parsed_util.json')
+    df = df[df.throwerTeam == selected].reset_index()
     df['throwSeconds'] = df['throwSeconds'].apply(int)
+    return df
+
+@st.cache_data
+def tab_data(df, map):
+    df = df[df.mapName == map].reset_index()
     df_t = df.query('throwerSide=="t"')
     df_ct = df.query('throwerSide=="ct"')
     return df_t, df_ct
@@ -46,18 +51,11 @@ def paginator_cb(key, change):
 
 def get_cluster_overview(df, type):
     groups = grouped_list(df)
-    for df_group in groups:
+    for df_group in groups[0:10]:
         n_row = len(df_group)
         score = int(df_group['util_score'].min())
-        print(df_group)
         util_type = df_group['grenadeType'].iloc[0]
-        if n_row <3:
-            continue
-        if score >1200:
-            continue
-        if (score >1000) & (type=="ct"):
-            continue
-        if not "Heroic" in list(df_group.opponentName):
+        if score >900:
             continue
 
         
@@ -100,13 +98,19 @@ def get_figure_col():
 def fill_tab(df, type):
     get_cluster_overview(df,type)
             
+def clear_map():
+    del st.session_state.fig
 
 
-df_t, df_ct = load_data()
+st.title('Utility tell tool')
+selected = st.selectbox("Select team",["MOUZ","FaZe Clan"] )
+df = load_data(selected)
+map_pick = st.selectbox("Select map",df.mapName.unique(), on_change=clear_map)
+
 if 'fig' not in st.session_state:
-    set_map(MAP_NAME)
+    set_map(map_pick)
+df_t, df_ct = tab_data(df, map_pick)
 
-st.title('Vitality on mirage utility tell tool')
 cluster_col, fig_col =st.columns(2)
 
 with cluster_col:
