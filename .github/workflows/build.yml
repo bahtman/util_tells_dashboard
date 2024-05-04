@@ -24,6 +24,6 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: . # current directory
-        file: ./Dockerfile # Path to your Dockerfile
+        file: ./DOCKERFILE # Path to your Dockerfile
         push: true
         tags: astralis.azurecr.io/util_dash:latest
