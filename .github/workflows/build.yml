@@ -3,7 +3,7 @@ name: Build and Push to ACR
 on:
   push:
     branches:
-      - main  # trigger this workflow on push to the main branch
+      - master  # trigger this workflow on push to the main branch
 
 jobs:
   build-and-push:
