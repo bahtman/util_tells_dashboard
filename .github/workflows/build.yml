@@ -1,0 +1,29 @@
+name: Build and Push to ACR
+
+on:
+  push:
+    branches:
+      - main  # trigger this workflow on push to the main branch
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Login to Azure Container Registry
+      uses: docker/login-action@v1
+      with:
+        registry: astralis.azurecr.io # e.g., myregistry.azurecr.io
+        username: ${{ secrets.AZURE_CLIENT_ID }}  # Service principal client ID
+        password: ${{ secrets.AZURE_CLIENT_SECRET }}  # Service principal client secret
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: . # current directory
+        file: ./Dockerfile # Path to your Dockerfile
+        push: true
+        tags: astralis.azurecr.io/util_dash:latest
