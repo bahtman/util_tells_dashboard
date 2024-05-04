@@ -1,4 +1,4 @@
 streamlit
 pandas
-cs-bahtml @ git+https://github.com/bahtman/cs_bahtML@972516247bfcdf4ee413946560916b2c432bad05
+cs-bahtml @ git+https://github.com/bahtman/cs_bahtML@3d82f0f52fac2ad67cb09b065d0b5d897c18beab
 jupyter
