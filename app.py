@@ -69,6 +69,7 @@ with filter1:
     selected = st.selectbox("Select team",df.throwerTeam.unique())
     df = select_team(df, selected)
     map_pick = st.selectbox("Select map",df.map_name.unique(), on_change=clear_map)
+    round_time = st.slider("Round time",0, 100, (0, 30),step=10)
 with filter2:
     throwerBuy = st.multiselect(f"Select Buy Type of {selected}", buytypes, default = buytypes)
     opponentBuy = st.multiselect(f"Select Buy Type of opponent", buytypes, default = buytypes)
@@ -76,7 +77,7 @@ with filter2:
 if 'fig' not in st.session_state:
     set_map(map_pick)
 
-df_t, df_ct = tab_data(df, map_pick, throwerBuy, opponentBuy)
+df_t, df_ct = tab_data(df, map_pick, throwerBuy, opponentBuy, round_time)
 
 cluster_col, fig_col =st.columns(2)
 with fig_col:
