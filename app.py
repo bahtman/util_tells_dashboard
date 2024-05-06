@@ -12,8 +12,8 @@ def clear_map():
     del st.session_state.fig
 
 
-def get_cluster_overview(df):
-    score_df = cluster_scores(df, min_occurence = 2)
+def get_cluster_overview(df, min_occurence):
+    score_df = cluster_scores(df, min_occurence = min_occurence)
     grouped_df = score_df.groupby("cluster")
     group_list = [(cluster, group ,group.util_score.min()) for cluster, group in grouped_df]
     groups = [(sort[0], sort[1]) for sort in sorted(group_list, key = lambda tup: tup[2])]
@@ -26,33 +26,15 @@ def get_cluster_overview(df):
 
         with st.expander(f"Dissimilarity score: {score} - {n_row} occurences - {util_type}"):
             for idx, row in group.iterrows():
+                #print(idx)
                 st.divider()
                 cc = st.columns([5,1])
-
-                # cc[0].text('Opponent')
-                # cc[0].text(row['ctTeam'])
-
-                # cc[1].text('Round time')
-                # cc[1].text(int(row['throwSeconds']))
-
-                # cc[2].text('Secret')
-                # cc[2].text(1.5)
-
-                # cc[3].text('Yard')
-                # cc[3].text(0)
-
-                # cc[4].text('Ramp')
-                # cc[4].text(0.5)
-
-                # cc[5].text('Lobby/A')
-                # cc[5].text(2)
                 cc[0].dataframe(row[["throwerName", "throwSeconds", "opponentTeam"]].to_frame().T, hide_index=True, use_container_width=True)
-                #
 
 
 
                 cc[-1].write("")
-                cc[-1].button(":punch:", key = f"{cluster}:{idx}", on_click=set_map, args=(row['map_name'],row))
+                cc[-1].button(":punch:", key = idx, on_click=set_map, args=(row['map_name'],row))
 
 
 
@@ -73,6 +55,7 @@ with filter1:
 with filter2:
     throwerBuy = st.multiselect(f"Select Buy Type of {selected}", buytypes, default = buytypes)
     opponentBuy = st.multiselect(f"Select Buy Type of opponent", buytypes, default = buytypes)
+    min_occurences = st.slider("Minimum occurences", 2, 10, 2)
 
 if 'fig' not in st.session_state:
     set_map(map_pick)
@@ -86,10 +69,10 @@ with fig_col:
 with cluster_col:
     t_tab, ct_tab = st.tabs(["T side", "CT side"])
     with t_tab:
-        get_cluster_overview(df_t)
+        get_cluster_overview(df_t,min_occurences)
 
     with ct_tab:
-        get_cluster_overview(df_ct)
+        get_cluster_overview(df_ct, min_occurences)
 
 
 
