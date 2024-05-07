@@ -3,13 +3,14 @@ from math import floor
 from src.data import load_data, set_map
 from src.scoring import cluster_scores
 from src.filtering import select_team, tab_data
-
+from streamlit_image_comparison import image_comparison
 
 st.set_page_config(layout="wide")
 
 
 def clear_map():
     del st.session_state.fig
+    #del st.session_state.fig2
 
 
 def get_cluster_overview(df, min_occurence):
@@ -48,7 +49,7 @@ df = load_data()
 filter1, filter2 = st.columns(2)
 buytypes = ["eco","force","full"]
 with filter1:
-    selected = st.selectbox("Select team",df.throwerTeam.unique())
+    selected = st.selectbox("Select team",df.throwerTeam.unique(), on_change=clear_map)
     df = select_team(df, selected)
     map_pick = st.selectbox("Select map",df.map_name.unique(), on_change=clear_map)
     round_time = st.slider("Round time",0, 100, (0, 30),step=10)
@@ -64,7 +65,10 @@ df_t, df_ct = tab_data(df, map_pick, throwerBuy, opponentBuy, round_time)
 
 cluster_col, fig_col =st.columns(2)
 with fig_col:
-    st.image(st.session_state.fig)
+    if map_pick in ['de_vertigo', 'de_nuke']:
+        image_comparison(st.session_state.fig, st.session_state.fig2,show_labels=False, starting_position=80)
+    else:
+        st.image(st.session_state.fig)
 
 with cluster_col:
     t_tab, ct_tab = st.tabs(["T side", "CT side"])

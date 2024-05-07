@@ -2,3 +2,4 @@ streamlit
 pandas
 cs-bahtml @ git+https://github.com/bahtman/cs_bahtML@c7b96ebc690d0764417ed106faf58fe47a1be68b
 jupyter
+streamlit-image-comparison
